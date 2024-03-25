@@ -31,6 +31,8 @@ class Input {
   std::optional<OutputFile> cli_output_file;
   std::vector<OutputFile> output_files;
   std::optional<std::string> fileParentPath;
+  string_o cli_output_prefix;
+  std::optional<bool> cli_multi_sim;
   AnalysisType argAnal;
   int64_t argVerb;
   bool argMin;
@@ -43,6 +45,8 @@ class Input {
     argVerb = cli_options.verbose;
     argMin = cli_options.minimal;
     cli_output_file = cli_options.output_file;
+    cli_output_prefix = cli_options.prefix;
+    cli_multi_sim = cli_options.multi_sim;
   }
 
   std::vector<tokens_t> read_input(LineInput& input,

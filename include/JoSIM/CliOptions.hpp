@@ -21,6 +21,9 @@ struct CliOptions {
  public:
   string_o cir_file_name;
   std::optional<OutputFile> output_file;
+  string_o prefix;
+
+  std::optional<bool> multi_sim;
 
   AnalysisType analysis_type = AnalysisType::Phase;
 

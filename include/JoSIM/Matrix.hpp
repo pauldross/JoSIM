@@ -15,40 +15,57 @@
 
 namespace JoSIM {
 
-class Matrix {
- private:
-  std::vector<NodeConfig> nodeConfig, nodeConfig2;
-  bool needsTR_ = true;
+    class Matrix {
+        private:
+            std::vector<NodeConfig> nodeConfig, nodeConfig2;
+            bool needsTR_ = true;
 
- public:
-  AnalysisType analysisType = AnalysisType::Phase;
-  std::vector<Function> sourcegen;
+        public:
+            AnalysisType analysisType = AnalysisType::Phase;
+            std::vector<Function> sourcegen;
 
-  Components components;
-  Spread spread;
-  std::unordered_map<std::string, int64_t> nm;
-  nodeconnections nc;
-  std::unordered_set<std::string> lm;
-  int64_t branchIndex = 0;
-  std::vector<double> nz;
+            Components components;
+            Spread spread;
+            std::unordered_map<std::string, int64_t> nm;
+            nodeconnections nc;
+            std::unordered_set<std::string> lm;
+            int64_t branchIndex = 0;
+            std::vector<double> nz;
 #ifdef SLU
-  std::vector<long long> ci, rp;
+            std::vector<long long> ci, rp;
 #else
-  std::vector<int64_t> ci, rp;
+            std::vector<int64_t> ci, rp;
 #endif
-  std::vector<RelevantTrace> relevantTraces;
-  std::vector<int64_t> relevantIndices;
+            std::vector<RelevantTrace> relevantTraces;
+            std::vector<int64_t> relevantIndices;
 
-  Matrix(){};
-  void create_matrix(Input& iObj);
-  void setup(Input& iObj);
-  void create_components(Input& iObj);
-  void handle_mutual_inductance(Input& iObj);
-  void reduce_step(Input& iObj);
-  void create_csr();
-  void create_nz();
-  void create_ci();
-  void create_rp();
-};
+            Matrix() {};
+
+            void create_matrix(Input &iObj);
+
+            void setup(Input &iObj);
+
+            void create_components(Input &iObj);
+
+            void handle_mutual_inductance(Input &iObj);
+
+            void reduce_step(Input &iObj);
+
+            void create_csr();
+
+            void create_nz();
+
+            void create_ci();
+
+            void create_rp();
+
+//            std::vector<int64_t> find_jj_nodes();
+            void print_matrix();
+            void print_devices();
+            void print_relevant_traces();
+            void print_jj_indeces();
+
+            Matrix(Matrix const &mObj);
+    };
 }  // namespace JoSIM
 #endif

@@ -450,3 +450,75 @@ void Matrix::create_rp() {
     }
   }
 }
+
+Matrix::Matrix(Matrix const &mObj) {
+    // copy constructor:
+    this->nodeConfig = mObj.nodeConfig;
+    this->nodeConfig2 = mObj.nodeConfig2;
+    for (const auto& sg : mObj.sourcegen){
+        this->sourcegen.emplace_back(sg);
+    }
+    this->components = mObj.components;
+    this->spread = mObj.spread;
+    this->nm = mObj.nm;
+    this->nc = mObj.nc;
+    this->lm = mObj.lm;
+    this->branchIndex = mObj.branchIndex;
+    this->nz = mObj.nz;
+    this->ci = mObj.ci;
+    this->rp = mObj.rp;
+    this->relevantTraces = mObj.relevantTraces;
+    this->relevantIndices = mObj.relevantIndices;
+}
+
+//std::vector<int64_t> Matrix::find_jj_nodes() {
+//
+//
+//
+//    return std::vector<int64_t>();
+//}
+
+void Matrix::print_devices(){
+    for (auto cs : this->components.currentsources){
+        if((this->components.currentsources.at(cs.sourceIndex_).indexInfo.posIndex_).has_value())
+            std::cout << "pos node index " << this->components.currentsources.at(cs.sourceIndex_).indexInfo.posIndex_.value() << std::endl;
+        if((this->components.currentsources.at(cs.sourceIndex_).indexInfo.negIndex_).has_value())
+            std::cout << "neg node index " << this->components.currentsources.at(cs.sourceIndex_).indexInfo.negIndex_.value() << std::endl;
+    }
+}
+
+void Matrix::print_matrix(){
+    std::cout << "nz : [ ";
+    for (auto i : this->nz){
+        std::cout << i << " ";
+    }
+    std::cout << "]\n";
+    std::cout << "ci : [ ";
+    for (auto i : this->ci){
+        std::cout << i << " ";
+    }
+    std::cout << "]\n";
+    std::cout << "rp : [ ";
+    for (auto i : this->rp){
+        std::cout << i << " ";
+    }
+    std::cout << "]\n";
+}
+
+void Matrix::print_relevant_traces(){
+    for(auto i : this->relevantIndices){
+        std::cout << "relevant index: " << i << std::endl;
+    }
+}
+
+void Matrix::print_jj_indeces(){
+    for(auto index : this->components.junctionIndices){
+        JJ junc = std::get<JJ>(this->components.devices.at(index));
+        if (junc.indexInfo.posIndex_.has_value()){
+            std::cout << "JJ " << index << " pos index: " << junc.indexInfo.posIndex_.value() << std::endl;
+        }
+        if (junc.indexInfo.negIndex_.has_value()){
+            std::cout << "JJ " << index <<  " neg index: " << junc.indexInfo.negIndex_.value() << std::endl;
+        }
+    }
+}

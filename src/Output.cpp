@@ -27,7 +27,13 @@ Output::Output(Input& iObj, Matrix& mObj, Simulation& sObj) {
   // Format the output into the relevant type
   if (iObj.cli_output_file) {
     if (iObj.cli_output_file.value().type() == FileOutputType::Csv) {
-      format_csv_or_dat(iObj.cli_output_file.value().name(), ',', iObj.argMin);
+        if (iObj.cli_multi_sim.value()) {
+            std::basic_string pref = std::basic_string(iObj.cli_output_prefix.value());
+            format_csv_or_dat(pref.append(std::to_string(sObj.simNumber)).append(".csv"), ',', iObj.argMin);
+//            format_csv_or_dat(iObj.cli_output_prefix.value().append(std::to_string(sObj.simNumber)).append(".csv"), ',', iObj.argMin);
+        } else {
+            format_csv_or_dat(iObj.cli_output_file.value().name(), ',', iObj.argMin);
+        }
     } else if (iObj.cli_output_file.value().type() == FileOutputType::Dat) {
       format_csv_or_dat(iObj.cli_output_file.value().name(), ' ', iObj.argMin);
     } else if (iObj.cli_output_file.value().type() == FileOutputType::Raw) {
