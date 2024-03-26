@@ -451,25 +451,7 @@ void Matrix::create_rp() {
   }
 }
 
-Matrix::Matrix(Matrix const &mObj) {
-    // copy constructor:
-    this->nodeConfig = mObj.nodeConfig;
-    this->nodeConfig2 = mObj.nodeConfig2;
-    for (const auto& sg : mObj.sourcegen){
-        this->sourcegen.emplace_back(sg);
-    }
-    this->components = mObj.components;
-    this->spread = mObj.spread;
-    this->nm = mObj.nm;
-    this->nc = mObj.nc;
-    this->lm = mObj.lm;
-    this->branchIndex = mObj.branchIndex;
-    this->nz = mObj.nz;
-    this->ci = mObj.ci;
-    this->rp = mObj.rp;
-    this->relevantTraces = mObj.relevantTraces;
-    this->relevantIndices = mObj.relevantIndices;
-}
+
 
 //std::vector<int64_t> Matrix::find_jj_nodes() {
 //
@@ -521,4 +503,59 @@ void Matrix::print_jj_indeces(){
             std::cout << "JJ " << index <<  " neg index: " << junc.indexInfo.negIndex_.value() << std::endl;
         }
     }
+}
+
+Matrix::Matrix(Matrix &mObj, std::vector<double> &nzRef, std::vector<int64_t> &ciRef, std::vector<int64_t> &rpRef,
+               std::unordered_map<std::string, int64_t> &nmRef,
+               std::unordered_set<std::string> &lmRef) :
+                nm(nmRef), lm(lmRef), nz(nzRef), ci(ciRef), rp(rpRef){
+    // copy constructor:
+    this->nodeConfig = mObj.nodeConfig;
+    this->nodeConfig2 = mObj.nodeConfig2;
+    for (const auto& sg : mObj.sourcegen){
+        this->sourcegen.emplace_back(sg);
+    }
+    this->components = mObj.components;
+    this->spread = mObj.spread;
+    this->branchIndex = mObj.branchIndex;
+    this->relevantTraces = mObj.relevantTraces;
+    this->relevantIndices = mObj.relevantIndices;
+}
+
+Matrix::Matrix(Matrix const &mObj) {
+    // copy constructor:
+    this->nodeConfig = mObj.nodeConfig;
+    this->nodeConfig2 = mObj.nodeConfig2;
+    for (const auto& sg : mObj.sourcegen){
+        this->sourcegen.emplace_back(sg);
+    }
+    this->components = mObj.components;
+    this->spread = mObj.spread;
+    this->nm = mObj.nm;
+    this->nc = mObj.nc;
+    this->lm = mObj.lm;
+    this->branchIndex = mObj.branchIndex;
+    this->nz = mObj.nz;
+    this->ci = mObj.ci;
+    this->rp = mObj.rp;
+    this->relevantTraces = mObj.relevantTraces;
+    this->relevantIndices = mObj.relevantIndices;
+}
+
+Matrix::Matrix(Matrix &mObj,std::vector<double>& nzRef, std::vector<int64_t> &ciRef, std::vector<int64_t> &rpRef)
+        : nz(nzRef), ci(ciRef), rp(rpRef){
+    // copy constructor:
+    this->nodeConfig = mObj.nodeConfig;
+    this->nodeConfig2 = mObj.nodeConfig2;
+    for (const auto& sg : mObj.sourcegen){
+        this->sourcegen.emplace_back(sg);
+    }
+    this->components = mObj.components;
+    this->spread = mObj.spread;
+    this->branchIndex = mObj.branchIndex;
+//    this->nz = mObj.nz;
+//    this->ci = mObj.ci;
+//    this->rp = mObj.rp;
+    this->relevantTraces = mObj.relevantTraces;
+    this->relevantIndices = mObj.relevantIndices;
 }
