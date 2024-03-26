@@ -156,7 +156,9 @@ CliOptions CliOptions::parse(int64_t argc, const char **argv) {
                         out.output_file = OutputFile(std::filesystem::current_path().append("output.csv").string());
                     }
                     break;
-
+                case 'b':
+                    out.NUM_SIMS = std::stoi(i.second.value_or("4"));
+                    break;
                     // Enable parallel processing (EXPERIMENTAL)
                 case 'p':
 #ifdef _OPENMP

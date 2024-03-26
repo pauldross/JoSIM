@@ -13,29 +13,34 @@
 
 namespace JoSIM {
 
-struct CliOptions {
- private:
-  tokens_t argv_to_tokens(const int64_t& argc, const char** argv);
-  vector_pair_t<char_o, string_o> argument_pairs(const tokens_t& tokens);
+    struct CliOptions {
+    private:
+        tokens_t argv_to_tokens(const int64_t &argc, const char **argv);
 
- public:
-  string_o cir_file_name;
-  std::optional<OutputFile> output_file;
-  string_o prefix;
+        vector_pair_t<char_o, string_o> argument_pairs(const tokens_t &tokens);
 
-  std::optional<bool> multi_sim;
+    public:
+        string_o cir_file_name;
+        std::optional<OutputFile> output_file;
+        string_o prefix;
 
-  AnalysisType analysis_type = AnalysisType::Phase;
+        std::optional<bool> multi_sim;
 
-  int64_t verbose = 0;
-  bool minimal = false;
-  bool parallel = false;
+        int_o NUM_SIMS;
 
-  // helper functions
-  static CliOptions parse(int64_t argc, const char** argv);
-  static void display_help();
-  static void version_info();
-};
+        AnalysisType analysis_type = AnalysisType::Phase;
+
+        int64_t verbose = 0;
+        bool minimal = false;
+        bool parallel = false;
+
+        // helper functions
+        static CliOptions parse(int64_t argc, const char **argv);
+
+        static void display_help();
+
+        static void version_info();
+    };
 
 }  // namespace JoSIM
 
