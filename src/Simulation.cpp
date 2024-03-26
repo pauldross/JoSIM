@@ -15,6 +15,47 @@
 
 using namespace JoSIM;
 
+Simulation::Simulation() = default;
+
+void Simulation::make_simulation(Input &iObj, Matrix &mObj, int simN) {
+    simNumber = simN;
+    while (needsTR_) {
+        // Do generic simulation setup for given step size
+        setup(iObj, mObj);
+        // Do solver setup
+#ifdef SLU
+        // SLU setup
+        lu.create_matrix(mObj.rp.size() - 1, mObj.nz, mObj.ci, mObj.rp);
+        lu.factorize();
+#else
+        // KLU setup
+        simOK_ = klu_l_defaults(&Common_);
+        assert(simOK_);
+        Symbolic_ = klu_l_analyze(mObj.rp.size() - 1, &mObj.rp.front(),
+                                  &mObj.ci.front(), &Common_);
+        Numeric_ = klu_l_factor(&mObj.rp.front(), &mObj.ci.front(),
+                                &mObj.nz.front(), Symbolic_, &Common_);
+#endif
+
+        // Run transient simulation
+        trans_sim(mObj);
+        // If step size is too large, reduce and try again
+        if (needsTR_) {
+            reduce_step(iObj, mObj);
+        }
+
+        // Do solver cleanup
+#ifdef SLU
+        // SLU cleanup
+        lu.free();
+#else
+        // KLU cleanup
+        klu_l_free_symbolic(&Symbolic_, &Common_);
+        klu_l_free_numeric(&Numeric_, &Common_);
+#endif
+    }
+}
+
 Simulation::Simulation(Input &iObj, Matrix &mObj, int simN) {
     simNumber = simN;
     while (needsTR_) {

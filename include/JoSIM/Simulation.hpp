@@ -21,72 +21,77 @@ namespace JoSIM {
 #define NONE_SPECIFIED 4
 
     class Results {
-        public:
-            std::vector<std::optional<std::vector<double>>> xVector;
-            std::vector<double> timeAxis;
+    public:
+        std::vector<std::optional<std::vector<double>>> xVector;
+        std::vector<double> timeAxis;
     };
 
     class Simulation {
-        private:
-            bool SLU = false;
-            std::vector<double> x_, b_;
-            int64_t simSize_;
-            JoSIM::AnalysisType atyp_;
-            bool minOut_;
-            bool needsLU_;
-            bool needsTR_ = true;
-            bool startup_;
-            double stepSize_, prstep_, prstart_;
+    private:
+        bool SLU = false;
+        std::vector<double> x_, b_;
+        int64_t simSize_{};
+        JoSIM::AnalysisType atyp_;
+        bool minOut_{};
+        bool needsLU_{};
+        bool needsTR_ = true;
+        bool startup_{};
+        double stepSize_{}, prstep_{}, prstart_{};
 #ifdef SLU
-            LUSolve lu;
+        LUSolve lu;
 #else
-            int64_t simOK_;
-            klu_l_symbolic *Symbolic_;
-            klu_l_common Common_;
-            klu_l_numeric *Numeric_;
+        int64_t simOK_{};
+        klu_l_symbolic *Symbolic_{};
+        klu_l_common Common_{};
+        klu_l_numeric *Numeric_{};
 #endif
 
-            void setup(Input &iObj, Matrix &mObj);
+        void setup(Input &iObj, Matrix &mObj);
 
-            void trans_sim(Matrix &mObj);
+        void trans_sim(Matrix &mObj);
 
-            void setup_b(Matrix &mObj, int64_t i, double step, double factor = 1);
+        void setup_b(Matrix &mObj, int64_t i, double step, double factor = 1);
 
-            void reduce_step(Input &iObj, Matrix &mObj);
+        void reduce_step(Input &iObj, Matrix &mObj);
 
-            void handle_cs(Matrix &mObj, double &step, const int64_t &i);
+        void handle_cs(Matrix &mObj, double &step, const int64_t &i);
 
-            void handle_resistors(Matrix &mObj, double &step);
+        void handle_resistors(Matrix &mObj, double &step);
 
-            void handle_inductors(Matrix &mObj, double factor = 1);
+        void handle_inductors(Matrix &mObj, double factor = 1);
 
-            void handle_capacitors(Matrix &mObj);
+        void handle_capacitors(Matrix &mObj);
 
-            void handle_jj(Matrix &mObj, int64_t &i, double &step, double factor = 1);
+        void handle_jj(Matrix &mObj, int64_t &i, double &step, double factor = 1);
 
-            void handle_vs(Matrix &mObj, const int64_t &i, double &step,
-                           double factor = 1);
+        void handle_vs(Matrix &mObj, const int64_t &i, double &step,
+                       double factor = 1);
 
-            void handle_ps(Matrix &mObj, const int64_t &i, double &step,
-                           double factor = 1);
+        void handle_ps(Matrix &mObj, const int64_t &i, double &step,
+                       double factor = 1);
 
-            void handle_ccvs(Matrix &mObj);
+        void handle_ccvs(Matrix &mObj);
 
-            void handle_vccs(Matrix &mObj);
+        void handle_vccs(Matrix &mObj);
 
-            void handle_tx(Matrix &mObj, const int64_t &i, double &step,
-                           double factor = 1);
+        void handle_tx(Matrix &mObj, const int64_t &i, double &step,
+                       double factor = 1);
 
-        public:
-            int simNumber;
+    public:
+        int simNumber{};
 
-            Results results;
+        Results results;
 
-            void print_x();
+        void print_x();
 
-            std::vector<std::pair<std::string, double>> getJunctionPhases(Matrix &mObj);
+        std::vector<std::pair<std::string, double>> getJunctionPhases(Matrix &mObj);
 
-            Simulation(Input &iObj, Matrix &mObj, int simN = 0);
+        Simulation(Input &iObj, Matrix &mObj, int simN = 0);
+
+        Simulation();
+
+        void make_simulation(Input &iObj, Matrix &mObj, int simN);
+
     };
 }  // namespace JoSIM
 #endif
